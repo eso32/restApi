@@ -6,6 +6,7 @@ import { userRouter } from './routes/user.routes';
 import { movieRouter } from './routes/movie.routes';
 import 'reflect-metadata';
 import { errorHandler } from './middleware/errorHandler';
+import { StatusCodes } from 'http-status-codes';
 dotenv.config();
 
 const app = express();
@@ -16,7 +17,7 @@ app.use('/auth', userRouter);
 app.use('/api', movieRouter);
 
 app.get('*', (req: Request, res: Response) => {
-  res.status(505).json({ message: 'Bad Request' });
+  res.status(StatusCodes.BAD_REQUEST).json({ message: 'Bad Request' });
 });
 
 AppDataSource.initialize()

@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 import * as cache from 'memory-cache';
 import { AppDataSource } from '../data-source';
 import { Movie } from '../entity/Movies.entity';
+import { StatusCodes } from 'http-status-codes';
 
 export class MovieController {
   static async getAllMovies(req: Request, res: Response) {
     const data = cache.get('data');
     if (data) {
       console.log('serving from cache');
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data,
       });
     } else {
@@ -16,7 +17,7 @@ export class MovieController {
       const movieRepository = AppDataSource.getRepository(Movie);
       const movies = await movieRepository.find();
       cache.put('data', movies, 10000);
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data: movies,
       });
     }
@@ -34,7 +35,7 @@ export class MovieController {
     movie.cast = cast;
     const movieRepository = AppDataSource.getRepository(Movie);
     await movieRepository.save(movie);
-    return res.status(200).json({ message: 'Movie created successfully', movie });
+    return res.status(StatusCodes.OK).json({ message: 'Movie created successfully', movie });
   }
 
   static async updateMovie(req: Request, res: Response) {
@@ -52,7 +53,7 @@ export class MovieController {
     movie.image = image;
     movie.cast = cast;
     await movieRepository.save(movie);
-    return res.status(200).json({ message: 'Movie updated successfully', movie });
+    return res.status(StatusCodes.OK).json({ message: 'Movie updated successfully', movie });
   }
 
   static async deleteMovie(req: Request, res: Response) {
@@ -62,6 +63,6 @@ export class MovieController {
       where: { id },
     });
     await movieRepository.remove(movie);
-    return res.status(200).json({ message: 'Movie deleted successfully', movie });
+    return res.status(StatusCodes.OK).json({ message: 'Movie deleted successfully', movie });
   }
 }

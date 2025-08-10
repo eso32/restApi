@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { AppDataSource } from '../data-source';
 import { User } from '../entity/User.entity';
+import { StatusCodes } from 'http-status-codes';
 
 export const authorization = (roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +11,7 @@ export const authorization = (roles: string[]) => {
     });
     console.log(user);
     if (!roles.includes(user.role)) {
-      return res.status(403).json({ message: 'Forbidden' });
+      return res.status(StatusCodes.FORBIDDEN).json({ message: 'Forbidden' });
     }
     next();
   };

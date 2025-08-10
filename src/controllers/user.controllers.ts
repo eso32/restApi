@@ -3,9 +3,10 @@ import { AppDataSource } from '../data-source';
 import { User } from '../entity/User.entity';
 import { encrypt } from '../helpers/encrypt';
 import * as cache from 'memory-cache';
+import { StatusCodes } from 'http-status-codes';
 
 export class UserController {
-  static async signup(req: Request, res: Response) {
+  static async signUp(req: Request, res: Response) {
     const { name, email, password, role } = req.body;
     const encryptedPassword = await encrypt.encryptpass(password);
     const user = new User();
@@ -20,13 +21,13 @@ export class UserController {
     // userRepository.create({ Name, email, password });
     const token = encrypt.generateToken({ id: user.id });
 
-    return res.status(200).json({ message: 'User created successfully', token, user });
+    return res.status(StatusCodes.OK).json({ message: 'User created successfully', token, user });
   }
   static async getUsers(req: Request, res: Response) {
     const data = cache.get('data');
     if (data) {
       console.log('serving from cache');
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data,
       });
     } else {
@@ -35,7 +36,7 @@ export class UserController {
       const users = await userRepository.find();
 
       cache.put('data', users, 6000);
-      return res.status(200).json({
+      return res.status(StatusCodes.OK).json({
         data: users,
       });
     }
@@ -50,7 +51,7 @@ export class UserController {
     user.name = name;
     user.email = email;
     await userRepository.save(user);
-    res.status(200).json({ message: 'udpdate', user });
+    res.status(StatusCodes.OK).json({ message: 'update', user });
   }
 
   static async deleteUser(req: Request, res: Response) {
@@ -60,6 +61,6 @@ export class UserController {
       where: { id },
     });
     await userRepository.remove(user);
-    res.status(200).json({ message: 'ok' });
+    res.status(StatusCodes.OK).json({ message: 'ok' });
   }
 }
