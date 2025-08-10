@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
-import { User } from "../entity/User.entity";
-import { encrypt } from "../helpers/encrypt";
-import * as cache from "memory-cache";
+import { Request, Response } from 'express';
+import { AppDataSource } from '../data-source';
+import { User } from '../entity/User.entity';
+import { encrypt } from '../helpers/encrypt';
+import * as cache from 'memory-cache';
 
 export class UserController {
   static async signup(req: Request, res: Response) {
@@ -20,23 +20,21 @@ export class UserController {
     // userRepository.create({ Name, email, password });
     const token = encrypt.generateToken({ id: user.id });
 
-    return res
-      .status(200)
-      .json({ message: "User created successfully", token, user });
+    return res.status(200).json({ message: 'User created successfully', token, user });
   }
   static async getUsers(req: Request, res: Response) {
-    const data = cache.get("data");
+    const data = cache.get('data');
     if (data) {
-      console.log("serving from cache");
+      console.log('serving from cache');
       return res.status(200).json({
         data,
       });
     } else {
-      console.log("serving from db");
+      console.log('serving from db');
       const userRepository = AppDataSource.getRepository(User);
       const users = await userRepository.find();
 
-      cache.put("data", users, 6000);
+      cache.put('data', users, 6000);
       return res.status(200).json({
         data: users,
       });
@@ -52,7 +50,7 @@ export class UserController {
     user.name = name;
     user.email = email;
     await userRepository.save(user);
-    res.status(200).json({ message: "udpdate", user });
+    res.status(200).json({ message: 'udpdate', user });
   }
 
   static async deleteUser(req: Request, res: Response) {
@@ -62,6 +60,6 @@ export class UserController {
       where: { id },
     });
     await userRepository.remove(user);
-    res.status(200).json({ message: "ok" });
+    res.status(200).json({ message: 'ok' });
   }
 }

@@ -1,8 +1,8 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class Movie1698321512351 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+    (await queryRunner.query(`
         --Table Definition
         CREATE TABLE "movies"  (
             "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -23,7 +23,7 @@ export class Movie1698321512351 implements MigrationInterface {
           
           
           `),
-      undefined;
+      undefined);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

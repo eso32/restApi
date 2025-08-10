@@ -4,11 +4,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity({ name: "movies" })
+@Entity({ name: 'movies' })
 export class Movie {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: false })
