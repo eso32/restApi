@@ -1,34 +1,34 @@
 import * as express from "express";
-import { authentification } from "../middleware/authentification";
+import { authentication } from "../middleware/authentication";
 import { UserController } from "../controllers/user.controllers";
 import { authorization } from "../middleware/authorization";
 import { AuthController } from "../controllers/auth.controller";
 const Router = express.Router();
 
 Router.get(
-  "/users",
-  authentification,
-  authorization(["admin"]),
-  UserController.getUsers
+    "/users",
+    authentication,
+    authorization(["admin"]),
+    UserController.getUsers
 );
 Router.get(
-  "/profile",
-  authentification,
-  authorization(["user", "admin"]),
-  AuthController.getProfile
+    "/profile",
+    authentication,
+    authorization(["user", "admin"]),
+    AuthController.getProfile
 );
 Router.post("/signup", UserController.signup);
 Router.post("/login", AuthController.login);
 Router.put(
-  "/update/:id",
-  authentification,
-  authorization(["user", "admin"]),
-  UserController.updateUser
+    "/update/:id",
+    authentication,
+    authorization(["user", "admin"]),
+    UserController.updateUser
 );
 Router.delete(
-  "/delete/:id",
-  authentification,
-  authorization(["admin"]),
-  UserController.deleteUser
+    "/delete/:id",
+    authentication,
+    authorization(["admin"]),
+    UserController.deleteUser
 );
 export { Router as userRouter };
