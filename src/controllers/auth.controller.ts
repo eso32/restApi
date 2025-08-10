@@ -8,14 +8,10 @@ export class AuthController {
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      if (!email || !password) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ message: ' email and password required' });
-      }
-
       const userRepository = AppDataSource.getRepository(User);
       const user = await userRepository.findOne({ where: { email } });
 
-      const isPasswordValid = encrypt.comparepassword(user.password, password);
+      const isPasswordValid = encrypt.comparePassword(user.password, password);
       if (!user || !isPasswordValid) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
       }

@@ -8,7 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 export class UserController {
   static async signUp(req: Request, res: Response) {
     const { name, email, password, role } = req.body;
-    const encryptedPassword = await encrypt.encryptpass(password);
+    const encryptedPassword = await encrypt.encryptPassword(password);
     const user = new User();
     user.name = name;
     user.email = email;
@@ -18,11 +18,11 @@ export class UserController {
     const userRepository = AppDataSource.getRepository(User);
     await userRepository.save(user);
 
-    // userRepository.create({ Name, email, password });
     const token = encrypt.generateToken({ id: user.id });
 
     return res.status(StatusCodes.OK).json({ message: 'User created successfully', token, user });
   }
+
   static async getUsers(req: Request, res: Response) {
     const data = cache.get('data');
     if (data) {
@@ -41,6 +41,7 @@ export class UserController {
       });
     }
   }
+
   static async updateUser(req: Request, res: Response) {
     const { id } = req.params;
     const { name, email } = req.body;
